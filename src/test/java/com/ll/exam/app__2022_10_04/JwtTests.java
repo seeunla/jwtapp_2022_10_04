@@ -1,5 +1,6 @@
 package com.ll.exam.app__2022_10_04;
 
+import com.ll.exam.app__2022_10_04.app.jwt.JwtConfig;
 import com.ll.exam.app__2022_10_04.app.jwt.JwtProvider;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.SecretKey;
+import java.lang.reflect.Method;
 import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +22,7 @@ class JwtTests {
 
 	@Autowired
 	private JwtProvider jwtProvider;
+
 
 	@Test
 	@DisplayName("secretKey 키가 존재해야한다.")
@@ -39,7 +42,7 @@ class JwtTests {
 	@Test
 	@DisplayName("JwtProvider 객체로 시크릿키 객체를 생성할 수 있다.")
 	void t3() {
-		SecretKey secretKey = jwtProvider.getSecretKey();
+		SecretKey secretKey = TestUtil.callMethod(jwtProvider, "getSecretKey");
 
 		assertThat(secretKey).isNotNull();
 	}
@@ -47,10 +50,14 @@ class JwtTests {
 	@Test
 	@DisplayName("SecretKey 객체는 단 한번만 생성되어야 한다.")
 	void t4() {
-		SecretKey secretKey1 = jwtProvider.getSecretKey();
-		SecretKey secretKey2 = jwtProvider.getSecretKey();
+//		SecretKey secretKey1 = jwtProvider.getSecretKey();
+//		SecretKey secretKey2 = jwtProvider.getSecretKey();
+		SecretKey secretKey1 = TestUtil.callMethod(jwtProvider, "getSecretKey");
+		SecretKey secretKey2 = TestUtil.callMethod(jwtProvider, "getSecretKey");
+
 
 		assertThat(secretKey1 == secretKey2).isTrue();
 	}
+
 
 }
