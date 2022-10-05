@@ -24,3 +24,7 @@ public class TestUtil {
         }
     }
 }
+
+class Article {
+
+}

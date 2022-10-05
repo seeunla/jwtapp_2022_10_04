@@ -14,7 +14,7 @@ public class JwtConfig {
     private String secretKeyPlain;
 
     @Bean
-    private SecretKey jwtSecretKey() {
+    public SecretKey jwtSecretKey() {
         String keyBase64Encoded = Base64.getEncoder().encodeToString(secretKeyPlain.getBytes());
         return Keys.hmacShaKeyFor(keyBase64Encoded.getBytes());
     }

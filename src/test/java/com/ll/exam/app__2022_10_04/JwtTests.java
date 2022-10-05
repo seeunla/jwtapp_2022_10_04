@@ -1,6 +1,5 @@
 package com.ll.exam.app__2022_10_04;
 
-import com.ll.exam.app__2022_10_04.app.jwt.JwtConfig;
 import com.ll.exam.app__2022_10_04.app.jwt.JwtProvider;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
@@ -8,10 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.crypto.SecretKey;
-import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,6 +60,30 @@ class JwtTests {
 
 		assertThat(secretKey1 == secretKey2).isTrue();
 	}
+
+	@Test
+	@DisplayName("accessToken 을 얻는다")
+	void t5() {
+		//회원번호가 1이고
+		// username이 admin이고
+		// ADMIN 역할과 MEMBER 역할을 동시에 가지고 있는 회원정보를 구성
+		Map<String,Object> claims = new HashMap<>();
+		claims.put("id", 1L);
+		claims.put("username", "admin");
+		claims.put("authorities", Arrays.asList(
+				new SimpleGrantedAuthority("ADMIN"),
+				new SimpleGrantedAuthority("MEMBER")
+		));
+		// 구성 끝
+
+		String accessToken = jwtProvider.generateAccessToken(claims, 60 * 60 * 5);
+
+		System.out.println("accessToken : " + accessToken);
+
+		assertThat(accessToken).isNotNull();
+
+	}
+
 
 
 }
